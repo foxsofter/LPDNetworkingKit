@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'LPDNetworkingKit_Example' do
+  pod 'LPDNetworkingKit', :path => '../'
+
+  target 'LPDNetworkingKit_Tests' do
+    inherit! :search_paths
+
+    pod 'Kiwi'
+  end
+end
