@@ -60,11 +60,11 @@
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		62BD90F2B1E6A44AF3530308 /* Pods-LPDNetworkingKit_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LPDNetworkingKit_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LPDNetworkingKit_Tests/Pods-LPDNetworkingKit_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		D58F4B0D655249741D23C110 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		D9D01E7B68C338EBAB9BBFA0 /* LPDNetworkingKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = LPDNetworkingKit.podspec; path = ../LPDNetworkingKit.podspec; sourceTree = "<group>"; };
+		D58F4B0D655249741D23C110 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		D9D01E7B68C338EBAB9BBFA0 /* LPDNetworkingKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LPDNetworkingKit.podspec; path = ../LPDNetworkingKit.podspec; sourceTree = "<group>"; };
 		E4EB01C34DD104B51891D7E3 /* Pods_LPDNetworkingKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LPDNetworkingKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6AF8A6E609B5D78304A1677 /* Pods_LPDNetworkingKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LPDNetworkingKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC4509C9FD4D1298832EE90B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		FC4509C9FD4D1298832EE90B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,6 +247,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = foxsofter;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = K5992V3NHR;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -513,9 +516,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = K5992V3NHR;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LPDNetworkingKit/LPDNetworkingKit-Prefix.pch";
 				INFOPLIST_FILE = "LPDNetworkingKit/LPDNetworkingKit-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -529,9 +534,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = K5992V3NHR;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LPDNetworkingKit/LPDNetworkingKit-Prefix.pch";
 				INFOPLIST_FILE = "LPDNetworkingKit/LPDNetworkingKit-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
