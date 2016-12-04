@@ -15,18 +15,10 @@ PODS:
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
   - Kiwi (2.4.0)
-  - LPDAdditionsKit (0.1.0)
-  - LPDControlsKit (0.1.0):
-    - LPDAdditionsKit
-    - Masonry
-    - SDVersion
-  - LPDNetworkingKit (0.1.0):
+  - LPDNetworkingKit (0.1.1):
     - AFNetworking
-    - LPDAdditionsKit
-    - LPDControlsKit
     - ReactiveCocoa (= 2.5)
     - YYModel
-  - Masonry (1.0.2)
   - ReactiveCocoa (2.5):
     - ReactiveCocoa/UI (= 2.5)
   - ReactiveCocoa/Core (2.5):
@@ -34,7 +26,6 @@ PODS:
   - ReactiveCocoa/no-arc (2.5)
   - ReactiveCocoa/UI (2.5):
     - ReactiveCocoa/Core
-  - SDVersion (3.6)
   - YYModel (1.0.4)
 
 DEPENDENCIES:
@@ -48,12 +39,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Kiwi: f49c9d54b28917df5928fe44968a39ed198cb8a8
-  LPDAdditionsKit: e06b1d1308eb3fbe89133ee3ed570f23f9d132f1
-  LPDControlsKit: 80b5c98834f3290243555436ccd53110f86ab172
-  LPDNetworkingKit: 6a56060454ce4432d14964cc420849a1c64ae262
-  Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
+  LPDNetworkingKit: 771e08ad8be61357abc6b37850df4bcd087f953e
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
-  SDVersion: 43383b6ac05462c973c3fd92d9748c74e360aba5
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
 PODFILE CHECKSUM: c1d041f56502414d529fa961c77bc42444251c29

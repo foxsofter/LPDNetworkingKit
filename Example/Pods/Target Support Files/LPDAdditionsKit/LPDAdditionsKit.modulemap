@@ -1,6 +1,0 @@
-framework module LPDAdditionsKit {
-  umbrella header "LPDAdditionsKit-umbrella.h"
-
-  export *
-  module * { export * }
-}
