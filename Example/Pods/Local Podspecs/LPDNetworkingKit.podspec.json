@@ -1,6 +1,6 @@
 {
   "name": "LPDNetworkingKit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "summary": "A short description of LPDNetworkingKit.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/foxsofter/lpd-networking-kit",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/foxsofter/lpd-networking-kit.git",
-    "tag": "0.1.1"
+    "tag": "0.1.2"
   },
   "platforms": {
     "ios": "8.0"
