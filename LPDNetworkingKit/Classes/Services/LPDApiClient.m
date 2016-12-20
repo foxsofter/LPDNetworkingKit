@@ -176,7 +176,7 @@ NS_ASSUME_NONNULL_BEGIN
     return cls;
   }
 
-  return [[self dictionaryOfEndpointClasses] objectForKey:[endpoint stringByDeletingLastPathComponent]];
+  return nil;
 }
 + (void)setResponseClass:(Class)responseClass forEndpoint:(NSString *)endpoint {
   [[self dictionaryOfEndpointClasses] setObject:responseClass forKey:endpoint];
