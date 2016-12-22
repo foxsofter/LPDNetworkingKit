@@ -170,7 +170,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 + (nullable Class)getResponseClass:(NSString *)endpoint {
-
   id cls = [[self dictionaryOfEndpointClasses] objectForKey:endpoint];
   if (cls) {
     return cls;
