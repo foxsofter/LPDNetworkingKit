@@ -1,6 +1,6 @@
 {
   "name": "LPDNetworkingKit",
-  "version": "0.1.2",
+  "version": "0.2.2",
   "summary": "A short description of LPDNetworkingKit.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/foxsofter/lpd-networking-kit",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/foxsofter/lpd-networking-kit.git",
-    "tag": "0.1.2"
+    "tag": "0.2.2"
   },
   "platforms": {
     "ios": "8.0"
@@ -26,8 +26,8 @@
     "YYModel": [
 
     ],
-    "ReactiveCocoa": [
-      "2.5"
+    "ReactiveObjC": [
+
     ]
   }
 }
