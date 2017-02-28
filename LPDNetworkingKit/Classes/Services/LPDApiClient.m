@@ -76,7 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSURLSessionDataTask *task = [self.sessionManager
       dataTaskWithRequest:self.request
         completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-          @strongify(self);
+          //@strongify(self);
           if (error) {
             [subscriber sendError:[NSError errorWithDomain:error.domain code:error.code userInfo:error.userInfo]];
           } else {
@@ -134,7 +134,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSURLSessionDataTask *task = [self.sessionManager
       dataTaskWithRequest:self.request
         completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-          @strongify(self);
+          //@strongify(self);
           if (error) {
             [subscriber sendError:[NSError errorWithDomain:error.domain code:error.code userInfo:error.userInfo]];
           } else {

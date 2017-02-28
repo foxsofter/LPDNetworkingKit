@@ -45,6 +45,7 @@ static RACSubject *networkStatusSubject;
   }
   [_dictionaryOfServerUrls setObject:serverUrl forKey:@(serverType)];
   if (_serverType != serverType) {
+      _serverType = serverType;
     return;
   }
 }
