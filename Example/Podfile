@@ -1,11 +1,15 @@
 use_frameworks!
 
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '8.0'
+
 target 'LPDNetworkingKit_Example' do
   pod 'LPDNetworkingKit', :path => '../'
+end
 
-  target 'LPDNetworkingKit_Tests' do
-    inherit! :search_paths
-
-    pod 'Kiwi'
-  end
+target 'LPDNetworkingKit_Tests' do
+  inherit! :search_paths
+  
+  pod 'Kiwi'
 end

@@ -15,7 +15,7 @@ PODS:
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
   - Kiwi (2.4.0)
-  - LPDNetworkingKit (0.2.2):
+  - LPDNetworkingKit (0.2.4):
     - AFNetworking
     - ReactiveObjC
     - YYModel
@@ -33,10 +33,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Kiwi: f49c9d54b28917df5928fe44968a39ed198cb8a8
-  LPDNetworkingKit: 1ef1c6c6eb64374bbde305861b45171aa184a0b7
+  LPDNetworkingKit: afdec5c9ed7f410e5b3b4de9252b6c5c8f25fe07
   ReactiveObjC: 7b6782ae39f9ac0f57205c3b0c0b69b9dd7048c0
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: c1d041f56502414d529fa961c77bc42444251c29
+PODFILE CHECKSUM: fc7d09f9c64f487e5a4e99dc18134636dbf8c972
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.2.1.beta.1
