@@ -175,8 +175,8 @@ NS_ASSUME_NONNULL_BEGIN
   if (cls) {
     return cls;
   }
-
-  [endpointClasses enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, Class obj, BOOL * _Nonnull stop) {
+  
+  [endpointClasses enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
     if ([key containsString:@"%@"]) {
       NSString *endpointPattern = [key stringByReplacingOccurrencesOfString:@"%@" withString:@"*"];
       NSError *error = nil;
