@@ -37,12 +37,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)rac_GET:(NSString *)path parameters:(nullable id)parameters;
 
 /**
- *  @brief A convenience around -HEAD:parameters:success:failure: that returns a cold
- *         signal of the resulting response headers or error.
- */
-- (RACSignal *)rac_HEAD:(NSString *)path parameters:(nullable id)parameters;
-
-/**
  *  @brief A convenience around -POST:parameters:success:failure: that returns a cold
  *         signal of the resulting JSON object and response headers or error.
  */
@@ -73,6 +67,12 @@ NS_ASSUME_NONNULL_BEGIN
  *         that returns a cold signal of the resulting JSON object and response headers or error.
  */
 - (RACSignal *)rac_DELETE:(NSString *)path parameters:(nullable id)parameters;
+
+/**
+ *  @brief A convenience around -HEAD:parameters:success:failure: that returns a cold
+ *         signal of the resulting response headers or error.
+ */
+- (RACSignal *)rac_HEAD:(NSString *)path parameters:(nullable id)parameters;
 
 /**
  *  @brief get container of model class.

@@ -12,8 +12,6 @@
 
 @interface LPDApiServer ()
 
-@property (nonatomic, strong) AFNetworkReachabilityManager *reachability;
-
 @property (nonatomic, strong) NSMutableDictionary *dictionaryOfServerUrls;
 
 @end

@@ -11,4 +11,6 @@
 
 @interface LPDApiServer : NSObject <LPDApiServerProtocol>
 
+@property (nonatomic, strong) AFNetworkReachabilityManager *reachability;
+
 @end

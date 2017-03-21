@@ -49,11 +49,6 @@ NS_ASSUME_NONNULL_BEGIN
     setNameWithFormat:@"%@ -rac_GET: %@, parameters: %@", self.class, path, parameters];
 }
 
-- (RACSignal *)rac_HEAD:(NSString *)path parameters:(nullable id)parameters {
-  return [[self rac_requestPath:path parameters:parameters method:@"HEAD"]
-    setNameWithFormat:@"%@ -rac_HEAD: %@, parameters: %@", self.class, path, parameters];
-}
-
 - (RACSignal *)rac_POST:(NSString *)path parameters:(nullable id)parameters {
   return [[self rac_requestPath:path parameters:parameters method:@"POST"]
     setNameWithFormat:@"%@ -rac_POST: %@, parameters: %@", self.class, path, parameters];
@@ -114,6 +109,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)rac_DELETE:(NSString *)path parameters:(nullable id)parameters {
   return [[self rac_requestPath:path parameters:parameters method:@"DELETE"]
     setNameWithFormat:@"%@ -rac_DELETE: %@, parameters: %@", self.class, path, parameters];
+}
+
+- (RACSignal *)rac_HEAD:(NSString *)path parameters:(nullable id)parameters {
+  return [[self rac_requestPath:path parameters:parameters method:@"HEAD"]
+          setNameWithFormat:@"%@ -rac_HEAD: %@, parameters: %@", self.class, path, parameters];
 }
 
 - (RACSignal *)rac_requestPath:(NSString *)path parameters:(nullable id)parameters method:(NSString *)method {
