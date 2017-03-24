@@ -1,6 +1,0 @@
-framework module LPDNetworkingKit {
-  umbrella header "LPDNetworkingKit-umbrella.h"
-
-  export *
-  module * { export * }
-}

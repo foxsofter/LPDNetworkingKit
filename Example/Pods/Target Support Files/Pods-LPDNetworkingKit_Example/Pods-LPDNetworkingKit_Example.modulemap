@@ -1,6 +1,0 @@
-framework module Pods_LPDNetworkingKit_Example {
-  umbrella header "Pods-LPDNetworkingKit_Example-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -14,9 +14,11 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
+  - Godzippa (1.1.0)
   - Kiwi (2.4.0)
   - LPDNetworkingKit (0.2.4):
     - AFNetworking
+    - Godzippa
     - ReactiveObjC
     - YYModel
   - ReactiveObjC (2.1.2)
@@ -32,11 +34,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  Godzippa: 21621e8ddc2f1521db473a72b48148c3f0e79d76
   Kiwi: f49c9d54b28917df5928fe44968a39ed198cb8a8
-  LPDNetworkingKit: afdec5c9ed7f410e5b3b4de9252b6c5c8f25fe07
+  LPDNetworkingKit: b1f045d679c5c0799599e9cee69e26423ca6740b
   ReactiveObjC: 7b6782ae39f9ac0f57205c3b0c0b69b9dd7048c0
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: fc7d09f9c64f487e5a4e99dc18134636dbf8c972
+PODFILE CHECKSUM: 00355c865049a10db142d58940ec8355916ada7f
 
 COCOAPODS: 1.2.1.beta.1
