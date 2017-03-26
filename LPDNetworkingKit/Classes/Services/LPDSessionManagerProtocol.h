@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AFNetworking/AFNetworking.h>
+#import <ReactiveObjC/ReactiveObjC.h>
 #import "LPDServerProtocol.h"
 
 typedef enum : NSUInteger {
@@ -51,6 +52,21 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief gzip压缩
  */
 @property (nonatomic, assign) BOOL isGzip;
+
+/**
+ *  @brief 网络状态的信号，订阅此信号
+ */
+@property (nonatomic, strong, readonly) RACSignal *networkStatusSignal;
+
+/**
+ *  @brief  开始侦听服务器网络链接状态
+ */
+- (void)startMonitoring;
+
+/**
+ *  @brief  停止侦听服务器网络链接状态
+ */
+- (void)stopMonitoring;
 
 /**
  *  @brief init

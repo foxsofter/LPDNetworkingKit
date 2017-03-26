@@ -13,6 +13,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static RACSubject *networkStatusSubject;
+
 @interface LPDSessionManager ()
 
 @property (nonatomic, strong) AFHTTPSessionManager *HTTPSessionManager;
@@ -22,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation LPDSessionManager
 
+@synthesize reachabilityManager = _reachabilityManager;
 @synthesize server = _server;
 @synthesize isGzip = _isGzip;
 
@@ -34,6 +37,11 @@ NS_ASSUME_NONNULL_BEGIN
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.URLCache = nil;
     _HTTPSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:configuration];
+    [_HTTPSessionManager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+      if (networkStatusSubject) {
+        [networkStatusSubject sendNext:@(status)];
+      }
+    }];
   }
   return self;
 }
@@ -52,6 +60,10 @@ NS_ASSUME_NONNULL_BEGIN
   _HTTPSessionManager.securityPolicy = securityPolicy;
 }
 
+- (RACSignal *)networkStatusSignal {
+  return networkStatusSubject
+  ?: (networkStatusSubject = [[RACSubject subject] setNameWithFormat:@"networkStatusSignal domain: %@",_server.domainUrl]);
+}
 
 #pragma mark - private methods
 
@@ -215,6 +227,14 @@ NS_ASSUME_NONNULL_BEGIN
   } else {
     return nil;
   }
+}
+
+- (void)startMonitoring {
+  [_HTTPSessionManager.reachabilityManager startMonitoring];
+}
+
+- (void)stopMonitoring {
+  [_HTTPSessionManager.reachabilityManager stopMonitoring];
 }
 
 @end
