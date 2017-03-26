@@ -18,9 +18,10 @@ FOUNDATION_EXPORT const unsigned char LPDNetworkingKitVersionString[];
 // using statements like #import <LPDNetworkingKit/PublicHeader.h>
 
 
-#import "LPDApiClient.h"
-#import "LPDApiServer.h"
-#import "LPDApiServerProtocol.h"
+#import "LPDSessionManager.h"
+#import "LPDSessionManagerProtocol.h"
+#import "LPDServer.h"
+#import "LPDServerProtocol.h"
 #import "LPDModel.h"
 #import "LPDModelProtocol.h"
 #import "NSArray+LPDModel.h"

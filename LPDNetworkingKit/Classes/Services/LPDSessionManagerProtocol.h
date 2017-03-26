@@ -1,5 +1,5 @@
 //
-//  LPDApiClientProtocol.h
+//  LPDSessionManagerProtocol.h
 //  Pods
 //
 //  Created by 李博 on 2017/3/24.
@@ -7,46 +7,45 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "LPDApiServerProtocol.h"
+#import <AFNetworking/AFNetworking.h>
+#import "LPDServerProtocol.h"
 
 typedef enum : NSUInteger {
-  LPDHTTPRequest = 0,       // default
-  LPDJSONRequest,
-  LPDPropertyListRequest,
-} LPDRequestSerializerType;
-
-typedef enum : NSUInteger {
-  LPDHTTPResponse = 0,
-  LPDJSONResponse,          // default
-  LPDXMLParserResponse,
-  LPDPropertyListResponse,
-  LPDImageResponse,
-  LPDCompoundResponse,
-} LPDResponseSerializerType;
+  LPDNetworkStatusUnknown = -1,
+  LPDNetworkStatusNotReachable = 0,
+  LPDNetworkStatusReachableViaWWAN = 1,
+  LPDNetworkStatusReachableViaWiFi = 2,
+} LPDNetworkStatus;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol LPDApiClientProtocol <NSObject>
+@protocol LPDSessionManagerProtocol <NSObject>
 
 /**
- *  @brief AFHTTPSessionManager
+ *  @brief requestSerializer
  */
-@property (nonatomic, strong, readonly) AFHTTPSessionManager *HTTPSessionManager;
+@property (nonatomic, strong) AFHTTPRequestSerializer <AFURLRequestSerialization> * requestSerializer;
+
+/**
+ *  @brief responseSerializer
+ */
+@property (nonatomic, strong) AFHTTPResponseSerializer <AFURLResponseSerialization> * responseSerializer;
+
+/**
+ *  @brief securityPolicy
+ */
+@property (nonatomic, strong) AFSecurityPolicy *securityPolicy;
+
+/**
+ *  @brief reachabilityManager
+ */
+@property (readwrite, nonatomic, strong) AFNetworkReachabilityManager *reachabilityManager;
 
 /**
  *  @brief api server
  */
-@property (nonatomic, strong, nullable) NSObject<LPDApiServerProtocol> *server;
+@property (nonatomic, strong, nullable) NSObject<LPDServerProtocol> *server;
 
-/**
- *  @brief requestType
- */
-@property (nonatomic, assign) LPDRequestSerializerType requestSerializerType;
-
-/**
- *  @brief responseType
- */
-@property (nonatomic, assign) LPDResponseSerializerType responseSerializerType;
 
 /**
  *  @brief gzip压缩
@@ -56,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  @brief init
  */
-- (instancetype)initWithServer:(nullable NSObject<LPDApiServerProtocol> *)server;
+- (instancetype)initWithServer:(nullable NSObject<LPDServerProtocol> *)server;
 
 /**
  *  @brief A convenience around -HEAD:parameters:success:failure: that returns a cold
@@ -95,24 +94,6 @@ constructingBodyWithBlock:(void (^)(id<AFMultipartFormData> formData))block;
  *         that returns a cold signal of the resulting JSON object and response headers or error.
  */
 - (RACSignal *)rac_DELETE:(NSString *)path parameters:(nullable id)parameters;
-
-/**
- *  @brief A convenience around -OPTIONS:parameters:success:failure:
- *         that returns a cold signal of the resulting JSON object and response headers or error.
- */
-- (RACSignal *)rac_OPTIONS:(NSString *)path parameters:(nullable id)parameters;
-
-/**
- *  @brief A convenience around -TRACE:parameters:success:failure:
- *         that returns a cold signal of the resulting JSON object and response headers or error.
- */
-- (RACSignal *)rac_TRACE:(NSString *)path parameters:(nullable id)parameters;
-
-/**
- *  @brief A convenience around -CONNECT:parameters:success:failure:
- *         that returns a cold signal of the resulting JSON object and response headers or error.
- */
-- (RACSignal *)rac_CONNECT:(NSString *)path parameters:(nullable id)parameters;
 
 /**
  *  @brief A convenience around -PATCH:parameters:success:failure:

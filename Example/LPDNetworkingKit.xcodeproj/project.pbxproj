@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3F9763B734792BA2A74CE734 /* libPods-LPDNetworkingKit_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06AE6E9935AC77AD506B4170 /* libPods-LPDNetworkingKit_Example.a */; };
+		4F61C976ED555F0D33888C72 /* libPods-LPDNetworkingKit_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3702B3725F9217E10B846F03 /* libPods-LPDNetworkingKit_Tests.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -21,7 +21,7 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
-		88C157D3B7B46C549155C708 /* libPods-LPDNetworkingKit_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A4DBA8A32B1CB689C7F2451 /* libPods-LPDNetworkingKit_Tests.a */; };
+		9D7261FCF168C13DE10DD224 /* libPods-LPDNetworkingKit_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D43864D43328128FC67152 /* libPods-LPDNetworkingKit_Example.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,9 +35,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		06AE6E9935AC77AD506B4170 /* libPods-LPDNetworkingKit_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LPDNetworkingKit_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2A4DBA8A32B1CB689C7F2451 /* libPods-LPDNetworkingKit_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LPDNetworkingKit_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		18D43864D43328128FC67152 /* libPods-LPDNetworkingKit_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LPDNetworkingKit_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		363A8755BDB85FADE408100B /* Pods-LPDNetworkingKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LPDNetworkingKit_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-LPDNetworkingKit_Example/Pods-LPDNetworkingKit_Example.release.xcconfig"; sourceTree = "<group>"; };
+		3702B3725F9217E10B846F03 /* libPods-LPDNetworkingKit_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LPDNetworkingKit_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		450875F0F5B4E24084FA86A5 /* Pods-LPDNetworkingKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LPDNetworkingKit_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LPDNetworkingKit_Example/Pods-LPDNetworkingKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		59431B7DA5198AF606F5E2F9 /* Pods-LPDNetworkingKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LPDNetworkingKit_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LPDNetworkingKit_Tests/Pods-LPDNetworkingKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* LPDNetworkingKit_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LPDNetworkingKit_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,7 +73,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				3F9763B734792BA2A74CE734 /* libPods-LPDNetworkingKit_Example.a in Frameworks */,
+				9D7261FCF168C13DE10DD224 /* libPods-LPDNetworkingKit_Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +84,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				88C157D3B7B46C549155C708 /* libPods-LPDNetworkingKit_Tests.a in Frameworks */,
+				4F61C976ED555F0D33888C72 /* libPods-LPDNetworkingKit_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,8 +130,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				06AE6E9935AC77AD506B4170 /* libPods-LPDNetworkingKit_Example.a */,
-				2A4DBA8A32B1CB689C7F2451 /* libPods-LPDNetworkingKit_Tests.a */,
+				18D43864D43328128FC67152 /* libPods-LPDNetworkingKit_Example.a */,
+				3702B3725F9217E10B846F03 /* libPods-LPDNetworkingKit_Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

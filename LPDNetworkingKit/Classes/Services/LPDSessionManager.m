@@ -1,40 +1,33 @@
 //
-//  LPDApiClient.m
+//  LPDSessionManager.m
 //  LPDMvvmKit
 //
 //  Created by foxsofter on 16/1/19.
 //  Copyright © 2016年 eleme. All rights reserved.
 //
 
-#import "LPDApiClient.h"
+#import "LPDSessionManager.h"
 #import "LPDModel.h"
-#import "LPDModelProtocol.h"
 #import "NSArray+LPDModel.h"
 #import "Godzippa.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LPDApiClient ()
+@interface LPDSessionManager ()
 
+@property (nonatomic, strong) AFHTTPSessionManager *HTTPSessionManager;
 @property (nonatomic, strong) NSMutableURLRequest *mutableURLRequest;
 
 @end
 
-@implementation LPDApiClient
+@implementation LPDSessionManager
 
-@synthesize HTTPSessionManager = _HTTPSessionManager;
 @synthesize server = _server;
-@synthesize requestSerializerType = _requestSerializerType;
-@synthesize responseSerializerType = _responseSerializerType;
 @synthesize isGzip = _isGzip;
 
 #pragma mark - life cycle
 
-- (instancetype)init {
-  return [self initWithServer:nil];
-}
-
-- (instancetype)initWithServer:(nullable NSObject<LPDApiServerProtocol> *)server {
+- (instancetype)initWithServer:(nullable NSObject<LPDServerProtocol> *)server {
   self = [super init];
   if (self) {
     _server = server;
@@ -47,66 +40,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - properties
 
-- (void)setRequestSerializerType:(LPDRequestSerializerType)requestSerializerType {
-  switch (requestSerializerType) {
-    case LPDHTTPRequest:
-    {
-      _HTTPSessionManager.requestSerializer = [AFHTTPRequestSerializer serializer];
-    }
-      break;
-    case LPDJSONRequest:
-    {
-      _HTTPSessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
-    }
-      break;
-    case LPDPropertyListRequest:
-    {
-      _HTTPSessionManager.requestSerializer = [AFPropertyListRequestSerializer serializer];
-    }
-      break;
-      
-    default:
-      break;
-  }
+- (void)setRequestSerializer:(AFHTTPRequestSerializer<AFURLRequestSerialization> *)requestSerializer {
+  _HTTPSessionManager.requestSerializer = requestSerializer;
 }
 
-- (void)setResponseSerializerType:(LPDResponseSerializerType)responseSerializerType {
-  switch (responseSerializerType) {
-    case LPDHTTPResponse:
-    {
-      _HTTPSessionManager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    }
-      break;
-    case LPDJSONResponse:
-    {
-      _HTTPSessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
-    }
-      break;
-    case LPDXMLParserResponse:
-    {
-      _HTTPSessionManager.responseSerializer = [AFXMLParserResponseSerializer serializer];
-    }
-      break;
-    case LPDPropertyListResponse:
-    {
-      _HTTPSessionManager.responseSerializer = [AFPropertyListResponseSerializer serializer];
-    }
-      break;
-    case LPDImageResponse:
-    {
-      _HTTPSessionManager.responseSerializer = [AFImageResponseSerializer serializer];
-    }
-      break;
-    case LPDCompoundResponse:
-    {
-      _HTTPSessionManager.responseSerializer = [AFCompoundResponseSerializer serializer];
-    }
-      break;
-      
-    default:
-      break;
-  }
+- (void)setResponseSerializer:(AFHTTPResponseSerializer<AFURLResponseSerialization> *)responseSerializer {
+  _HTTPSessionManager.responseSerializer = responseSerializer;
 }
+
+- (void)setSecurityPolicy:(AFSecurityPolicy *)securityPolicy {
+  _HTTPSessionManager.securityPolicy = securityPolicy;
+}
+
 
 #pragma mark - private methods
 
@@ -152,21 +97,6 @@ NS_ASSUME_NONNULL_BEGIN
           setNameWithFormat:@"%@ -rac_DELETE: %@, parameters: %@", self.class, path, parameters];
 }
 
-- (RACSignal *)rac_OPTIONS:(NSString *)path parameters:(nullable id)parameters {
-  return [[self rac_requestPath:path parameters:parameters method:@"OPTIONS" constructingBodyWithBlock:nil]
-          setNameWithFormat:@"%@ -rac_OPTIONS: %@, parameters: %@", self.class, path, parameters];
-}
-
-- (RACSignal *)rac_TRACE:(NSString *)path parameters:(nullable id)parameters {
-  return [[self rac_requestPath:path parameters:parameters method:@"TRACE" constructingBodyWithBlock:nil]
-          setNameWithFormat:@"%@ -rac_TRACE: %@, parameters: %@", self.class, path, parameters];
-}
-
-- (RACSignal *)rac_CONNECT:(NSString *)path parameters:(nullable id)parameters {
-  return [[self rac_requestPath:path parameters:parameters method:@"CONNECT" constructingBodyWithBlock:nil]
-          setNameWithFormat:@"%@ -rac_CONNECT: %@, parameters: %@", self.class, path, parameters];
-}
-
 - (RACSignal *)rac_PATCH:(NSString *)path parameters:(nullable id)parameters {
   return [[self rac_requestPath:path parameters:parameters method:@"PATCH" constructingBodyWithBlock:nil]
     setNameWithFormat:@"%@ -rac_PATCH: %@, parameters: %@", self.class, path, parameters];
@@ -180,7 +110,7 @@ NS_ASSUME_NONNULL_BEGIN
     if ([path containsString:@"http"]) {
       urlString = path;
     } else {
-      urlString = [[NSURL URLWithString:path relativeToURL:[NSURL URLWithString:self.server.serverUrl]] absoluteString];
+      urlString = [[NSURL URLWithString:path relativeToURL:[NSURL URLWithString:self.server.domainUrl]] absoluteString];
     }
     
     if (block) {
