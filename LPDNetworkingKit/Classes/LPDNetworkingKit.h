@@ -17,12 +17,9 @@ FOUNDATION_EXPORT const unsigned char LPDNetworkingKitVersionString[];
 // In this header, you should import all the public headers of your framework
 // using statements like #import <LPDNetworkingKit/PublicHeader.h>
 
-
-#import "LPDSessionManager.h"
-#import "LPDSessionManagerProtocol.h"
-#import "LPDServer.h"
-#import "LPDServerProtocol.h"
 #import "LPDModel.h"
 #import "LPDModelProtocol.h"
 #import "NSArray+LPDModel.h"
-
+#import "LPDRequestManager.h"
+#import "LPDServer.h"
+#import "LPDServerManager.h"

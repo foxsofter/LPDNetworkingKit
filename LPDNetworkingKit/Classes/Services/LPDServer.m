@@ -1,12 +1,17 @@
 //
 //  LPDServer.m
-//  LPDMvvmKit
+//  Pods
 //
-//  Created by foxsofter on 16/1/21.
-//  Copyright © 2016年 eleme. All rights reserved.
+//  Created by 李博 on 2017/3/27.
+//
 //
 
 #import "LPDServer.h"
+#import "LPDServer+Private.h"
+#import "LPDGzipRequestSerializer.h"
+
+
+static RACSubject *networkStatusSubject;
 
 @interface LPDServer ()
 
@@ -16,34 +21,94 @@
 
 @implementation LPDServer
 
-@synthesize environment = _environment;
-
-- (instancetype)init {
+- (instancetype)initWithServerName:(NSString *)serverName
+{
   self = [super init];
   if (self) {
+    _serverName = serverName;
     _dictionaryOfDomainUrl = [NSMutableDictionary dictionaryWithCapacity:3];
+    
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.URLCache = nil;
+    _HTTPSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:configuration];
+    _requestSerializer = _HTTPSessionManager.requestSerializer;
+    _responseSerializer = _HTTPSessionManager.responseSerializer;
+    _securityPolicy = _HTTPSessionManager.securityPolicy;
+    
+    [_HTTPSessionManager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+      if (networkStatusSubject) {
+        [networkStatusSubject sendNext:@(status)];
+      }
+    }];
   }
   return self;
 }
 
-- (void)setDomainUrl:(NSString *)domainUrl forEnvironment:(LPDServerEnvironment)environment {
+- (RACSignal *)networkStatusSignal
+{
+  return networkStatusSubject ?: (networkStatusSubject = [[RACSubject subject] setNameWithFormat:@"networkStatusSignal serverName: %@",_serverName]);
+}
+
+#pragma mark - properties
+
+- (void)setRequestSerializer:(AFHTTPRequestSerializer<AFURLRequestSerialization> *)requestSerializer
+{
+  _HTTPSessionManager.requestSerializer = requestSerializer;
+  [self setCompressionType:_compressionType];
+}
+
+- (void)setResponseSerializer:(AFHTTPResponseSerializer<AFURLResponseSerialization> *)responseSerializer
+{
+  _HTTPSessionManager.responseSerializer = responseSerializer;
+}
+
+- (void)setSecurityPolicy:(AFSecurityPolicy *)securityPolicy
+{
+  _HTTPSessionManager.securityPolicy = securityPolicy;
+}
+
+- (AFNetworkReachabilityManager *)reachabilityManager
+{
+  return _HTTPSessionManager.reachabilityManager;
+}
+
+- (void)setCompressionType:(LPDCompressionType)compressionType
+{
+  switch (compressionType) {
+    case LPDCompressionTypeGzip:
+    {
+      _HTTPSessionManager.requestSerializer = [LPDGzipRequestSerializer serializerWithSerializer:_HTTPSessionManager.requestSerializer];
+    }
+      break;
+      
+    default:
+      break;
+  }
+}
+
+#pragma mark - methods
+
+- (void)setDomainUrl:(NSString *)domainUrl forEnvironment:(LPDServerEnvironment)environment
+{
   if ([[_dictionaryOfDomainUrl objectForKey:@(environment)] isEqualToString:domainUrl]) {
     return;
   }
   [_dictionaryOfDomainUrl setObject:domainUrl forKey:@(environment)];
 }
 
-#pragma mark - properties
-
-- (void)setEnvironment:(LPDServerEnvironment)environment {
-  if (environment == LPDServerEnvironmentUnknown || _environment == environment) {
-    return;
-  }
-  _environment == environment;
+- (NSString *)getDomainUrlForEnvironment:(LPDServerEnvironment)environment
+{
+  return environment == LPDServerEnvironmentUnknown ? nil : [_dictionaryOfDomainUrl objectForKey:@(environment)];
 }
 
-- (NSString *)domainUrl {
-  return _environment == LPDServerEnvironmentUnknown ? nil : [_dictionaryOfDomainUrl objectForKey:@(_environment)];
+- (void)startMonitoring
+{
+  [_HTTPSessionManager.reachabilityManager startMonitoring];
+}
+
+- (void)stopMonitoring
+{
+  [_HTTPSessionManager.reachabilityManager stopMonitoring];
 }
 
 @end
