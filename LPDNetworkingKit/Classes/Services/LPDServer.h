@@ -17,22 +17,12 @@ typedef NS_ENUM(NSUInteger, LPDServerEnvironment) {
   LPDServerEnvironmentProduce,
 };
 
-typedef NS_ENUM(NSUInteger, LPDCompressionType) {
-  LPDCompressionTypeNone,
-  LPDCompressionTypeGzip,
-};
-
 @interface LPDServer : NSObject
 
 /**
  *  @brief 服务名称
  */
 @property (nonatomic, copy) NSString *serverName;
-
-/**
- *  @brief 压缩方式
- */
-@property (nonatomic, assign) LPDCompressionType compressionType;
 
 /**
  *  @brief 网络状态的信号，订阅此信号

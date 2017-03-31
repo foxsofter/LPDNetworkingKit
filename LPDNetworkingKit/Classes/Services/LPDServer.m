@@ -31,6 +31,7 @@ static RACSubject *networkStatusSubject;
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.URLCache = nil;
     _HTTPSessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:configuration];
+    _HTTPSessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
     _requestSerializer = _HTTPSessionManager.requestSerializer;
     _responseSerializer = _HTTPSessionManager.responseSerializer;
     _securityPolicy = _HTTPSessionManager.securityPolicy;
@@ -54,7 +55,6 @@ static RACSubject *networkStatusSubject;
 - (void)setRequestSerializer:(AFHTTPRequestSerializer<AFURLRequestSerialization> *)requestSerializer
 {
   _HTTPSessionManager.requestSerializer = requestSerializer;
-  [self setCompressionType:_compressionType];
 }
 
 - (void)setResponseSerializer:(AFHTTPResponseSerializer<AFURLResponseSerialization> *)responseSerializer
@@ -70,20 +70,6 @@ static RACSubject *networkStatusSubject;
 - (AFNetworkReachabilityManager *)reachabilityManager
 {
   return _HTTPSessionManager.reachabilityManager;
-}
-
-- (void)setCompressionType:(LPDCompressionType)compressionType
-{
-  switch (compressionType) {
-    case LPDCompressionTypeGzip:
-    {
-      _HTTPSessionManager.requestSerializer = [LPDGzipRequestSerializer serializerWithSerializer:_HTTPSessionManager.requestSerializer];
-    }
-      break;
-      
-    default:
-      break;
-  }
 }
 
 #pragma mark - methods

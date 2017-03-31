@@ -1,55 +1,89 @@
 //
-//  LPDRequestManager.m
+//  LPDHTTPRequest.m
 //  Pods
 //
-//  Created by 李博 on 2017/3/27.
+//  Created by 李博 on 2017/3/30.
 //
 //
 
-#import "LPDRequestManager.h"
-#import "LPDServer+Private.h"
+#import "LPDHTTPRequest.h"
 #import "LPDModel.h"
 #import "NSArray+LPDModel.h"
 #import "LPDGzipRequestSerializer.h"
 
-static NSMutableURLRequest *mutableURLRequest;
+static AFHTTPSessionManager *HTTPSessionManager;
+static RACSubject *networkStatusSubject;
 
-@interface LPDRequestManager ()
+@interface LPDHTTPRequest ()
 
 @end
 
-@implementation LPDRequestManager
+@implementation LPDHTTPRequest
+
++ (void)initialize {
+  if (self == [LPDHTTPRequest class]) {
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    configuration.URLCache = nil;
+    HTTPSessionManager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
+    [HTTPSessionManager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+      if (networkStatusSubject) {
+        [networkStatusSubject sendNext:@(status)];
+      }
+    }];
+  }
+}
+
++ (RACSignal *)networkStatusSignal
+{
+  return networkStatusSubject ?: (networkStatusSubject = [[RACSubject subject] setNameWithFormat:@"networkStatusSignal"]);
+}
+
+- (void)startMonitoring {
+  [HTTPSessionManager.reachabilityManager startMonitoring];
+}
+
+- (void)stopMonitoring {
+  [HTTPSessionManager.reachabilityManager stopMonitoring];
+}
 
 + (RACSignal *_Nonnull)rac_requestWithMethod:(NSString *_Nonnull)method
                                    URLString:(NSString *_Nonnull)URLString
                                   parameters:(NSDictionary *_Nullable)parameters
                    constructingBodyWithBlock:(void (^_Nullable)(id <AFMultipartFormData> _Nonnull formData))block
-                                      server:(LPDServer*_Nullable)server
+                                      header:(LPDHTTPRequestHeader*_Nullable)header
 {
   @weakify(self);
   return [RACSignal createSignal:^(id<RACSubscriber> subscriber) {
     @strongify(self);
-    NSString *domainUrlString = [server getDomainUrlForEnvironment:[LPDServerManager sharedManager].environment];
-    NSString *fullUrlString = nil;
-    if ([URLString containsString:@"http"]) {
-      fullUrlString = URLString;
-    } else {
-      fullUrlString = [[NSURL URLWithString:URLString relativeToURL:[NSURL URLWithString:domainUrlString]] absoluteString];
+    
+    NSDictionary<NSString *, NSString *> *allHTTPHeaderFields = [header allHTTPHeaderFields];
+    if ([[allHTTPHeaderFields objectForKey:@"Content-Type"] isEqualToString:@"application/x-www-form-urlencoded"]) {
+      HTTPSessionManager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    } else if ([[allHTTPHeaderFields objectForKey:@"Content-Type"] isEqualToString:@"application/json"]) {
+      HTTPSessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
+    } else if ([[allHTTPHeaderFields objectForKey:@"Content-Type"] isEqualToString:@"application/x-plist"]) {
+      HTTPSessionManager.requestSerializer = [AFPropertyListRequestSerializer serializer];
+    }
+    
+    if ([[allHTTPHeaderFields objectForKey:@"Content-Encoding"] isEqualToString:@"gzip"]) {
+      HTTPSessionManager.requestSerializer = [LPDGzipRequestSerializer serializerWithSerializer:HTTPSessionManager.requestSerializer];
     }
     
     NSError *__autoreleasing error = nil;
-
+    
+    NSMutableURLRequest *mutableURLRequest = nil;
+    
     if (block) {
-      mutableURLRequest = [server.requestSerializer multipartFormRequestWithMethod:method URLString:URLString parameters:parameters constructingBodyWithBlock:block error:&error];
+      mutableURLRequest = [HTTPSessionManager.requestSerializer multipartFormRequestWithMethod:method URLString:URLString parameters:parameters constructingBodyWithBlock:block error:&error];
     } else {
-      mutableURLRequest = [server.requestSerializer requestWithMethod:method URLString:URLString parameters:parameters error:&error];
+      mutableURLRequest = [HTTPSessionManager.requestSerializer requestWithMethod:method URLString:URLString parameters:parameters error:&error];
     }
     
     if (error) {
       [subscriber sendError:[NSError errorWithDomain:error.domain code:error.code userInfo:error.userInfo]];
     }
     
-    NSURLSessionDataTask *task = [server.HTTPSessionManager
+    NSURLSessionDataTask *task = [HTTPSessionManager
                                   dataTaskWithRequest:mutableURLRequest
                                   completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
                                     @strongify(self);
@@ -68,7 +102,7 @@ static NSMutableURLRequest *mutableURLRequest;
                                       }
                                       [subscriber sendCompleted];
                                     }
-    }];
+                                  }];
     
     [task resume];
     
@@ -120,8 +154,8 @@ static NSMutableURLRequest *mutableURLRequest;
 }
 
 + (NSObject *_Nonnull)resolveResponse:(NSHTTPURLResponse *_Nullable)response
-                              endpoint:(NSString *_Nullable)endpoint
-                        responseObject:(id _Nullable)responseObject
+                             endpoint:(NSString *_Nullable)endpoint
+                       responseObject:(id _Nullable)responseObject
 {
   id responseModel = responseObject;
   Class responseClass = [self.class getResponseClass:endpoint];
