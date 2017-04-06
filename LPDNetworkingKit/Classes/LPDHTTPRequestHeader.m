@@ -2,7 +2,7 @@
 //  LPDHTTPRequestHeader.m
 //  Pods
 //
-//  Created by 李博 on 2017/3/30.
+//  Created by 李博 on 2017/4/6.
 //
 //
 
@@ -15,13 +15,6 @@
 @end
 
 @implementation LPDHTTPRequestHeader
-
-+ (instancetype)defaultRequestHeader
-{
-  LPDHTTPRequestHeader *header = [[self alloc] init];
-  [header defaultConfig];
-  return header;
-}
 
 - (instancetype)init
 {
@@ -44,12 +37,6 @@
 - (NSDictionary<NSString *, NSString *> *)allHTTPHeaderFields
 {
   return [_mutableHTTPRequestHeaders copy];
-}
-
-- (void)defaultConfig
-{
-  [_mutableHTTPRequestHeaders setObject:@"application/x-www-form-urlencoded" forKey:@"Content-Type"];
-  [_mutableHTTPRequestHeaders setObject:@"application/json" forKey:@"Accept"];
 }
 
 @end
