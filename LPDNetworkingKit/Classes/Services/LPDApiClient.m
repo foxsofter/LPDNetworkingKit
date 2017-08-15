@@ -205,7 +205,7 @@ NS_ASSUME_NONNULL_BEGIN
   [[self dictionaryOfEndpointClasses] setObject:responseClass forKey:endpoint];
 }
 
-// can override
+// override to handle business error
 - (nullable LPDResponseResolveResult *)resolveResponse:(NSHTTPURLResponse *)response
                               endpoint:(NSString *)endpoint
                         responseObject:(id)responseObject {
