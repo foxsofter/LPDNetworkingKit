@@ -11,6 +11,18 @@
 #import "LPDModelProtocol.h"
 #import "NSArray+LPDModel.h"
 
+
+@implementation LPDResponseResolveResult
+
++ (instancetype)resultWithModel:(NSObject *)responseModel error:(NSError *)error {
+  LPDResponseResolveResult *result = [[LPDResponseResolveResult alloc] init];
+  result.responseModel = responseModel;
+  result.error = error;
+  return result;
+}
+
+@end
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LPDApiClient ()
@@ -62,17 +74,18 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)rac_POST:(NSString *)path
                  parameters:(nullable id)parameters
   constructingBodyWithBlock:(void (^)(id<AFMultipartFormData> formData))block {
+  parameters = [self addExtraParams:parameters];
   @weakify(self);
   return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
     @strongify(self);
-    self.request = [self.sessionManager.requestSerializer
+     NSMutableURLRequest * request = [self.sessionManager.requestSerializer
       multipartFormRequestWithMethod:@"POST"
                            URLString:[[NSURL URLWithString:path
                                              relativeToURL:[NSURL URLWithString:self.server.serverUrl]] absoluteString]
                           parameters:parameters
            constructingBodyWithBlock:block
                                error:nil];
-
+    request = [self addExtraHTTPHeader:request withParameters:parameters];
     NSURLSessionDataTask *task = [self.sessionManager
       dataTaskWithRequest:self.request
         completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
@@ -80,15 +93,14 @@ NS_ASSUME_NONNULL_BEGIN
           if (error) {
             [subscriber sendError:[NSError errorWithDomain:error.domain code:error.code userInfo:error.userInfo]];
           } else {
-            NSObject *responseModel = nil;
-            if (responseObject) {
-              responseModel =
-                [self resolveResponse:(NSHTTPURLResponse *)response endpoint:path responseObject:responseObject];
+            LPDResponseResolveResult *result = [self resolveResponse:(NSHTTPURLResponse *)response endpoint:path responseObject:responseObject];
+            NSObject *responseModel = result.responseModel;
+            NSError *err = result.error;
+            if (err) {
+              [subscriber sendError:err];
             }
             if (responseModel) {
               [subscriber sendNext:RACTuplePack(responseModel, response)];
-            } else {
-              [subscriber sendNext:RACTuplePack(responseObject, response)];
             }
             [subscriber sendCompleted];
           }
@@ -117,6 +129,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (RACSignal *)rac_requestPath:(NSString *)path parameters:(nullable id)parameters method:(NSString *)method {
+  parameters = [self addExtraParams:parameters];
   @weakify(self);
   return [RACSignal createSignal:^(id<RACSubscriber> subscriber) {
     @strongify(self);
@@ -126,27 +139,26 @@ NS_ASSUME_NONNULL_BEGIN
     } else {
       urlString = [[NSURL URLWithString:path relativeToURL:[NSURL URLWithString:self.server.serverUrl]] absoluteString];
     }
-    self.request = [self.sessionManager.requestSerializer requestWithMethod:method
+    NSMutableURLRequest * request = [self.sessionManager.requestSerializer requestWithMethod:method
                                                                   URLString:urlString
                                                                  parameters:parameters
                                                                       error:nil];
-
+    request = [self addExtraHTTPHeader:request withParameters:parameters];
     NSURLSessionDataTask *task = [self.sessionManager
-      dataTaskWithRequest:self.request
+      dataTaskWithRequest:request
         completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
           @strongify(self);
           if (error) {
             [subscriber sendError:[NSError errorWithDomain:error.domain code:error.code userInfo:error.userInfo]];
           } else {
-            NSObject *responseModel = nil;
-            if (responseObject) {
-              responseModel =
-                [self resolveResponse:(NSHTTPURLResponse *)response endpoint:path responseObject:responseObject];
+            LPDResponseResolveResult *result = [self resolveResponse:(NSHTTPURLResponse *)response endpoint:path responseObject:responseObject];
+            NSObject *responseModel = result.responseModel;
+            NSError *err = result.error;
+            if (err) {
+              [subscriber sendError:err];
             }
             if (responseModel) {
               [subscriber sendNext:RACTuplePack(responseModel, response)];
-            } else {
-              [subscriber sendNext:RACTuplePack(responseObject, response)];
             }
             [subscriber sendCompleted];
           }
@@ -195,19 +207,43 @@ NS_ASSUME_NONNULL_BEGIN
   [[self dictionaryOfEndpointClasses] setObject:responseClass forKey:endpoint];
 }
 
-- (nullable NSObject *)resolveResponse:(NSHTTPURLResponse *)response
+
+/**
+ *  @brief override to handle business error
+ *  这里保证了总能返回至少是responseObject, 不处理业务异常;
+ */
+- (nullable LPDResponseResolveResult *)resolveResponse:(NSHTTPURLResponse *)response
                               endpoint:(NSString *)endpoint
                         responseObject:(id)responseObject {
   id responseModel = responseObject;
+  id model = [self modelWithResponseObject:responseObject endpoint:endpoint];
+  if (model) {
+    responseModel = model;
+  }
+  return [LPDResponseResolveResult resultWithModel:responseModel error:nil];
+}
+
+- (NSObject *)modelWithResponseObject:(id)responseObject endpoint:(NSString *)endpoint {
+  id model = nil;
   Class responseClass = [self.class getResponseClass:endpoint];
   if (responseClass) {
     if ([responseObject isKindOfClass:NSArray.class]) {
-      responseModel = [NSArray modelArrayWithClass:responseClass json:responseObject];
+      model = [NSArray modelArrayWithClass:responseClass json:responseObject];
     } else {
-      responseModel = [responseClass modelWithJSON:responseObject];
+      model = [responseClass modelWithJSON:responseObject];
     }
   }
-  return responseModel;
+  return model;
+}
+
+// add extra headers
+- (NSMutableURLRequest *)addExtraHTTPHeader:(NSMutableURLRequest *)request withParameters:(nullable id)parameters {
+  return request;
+}
+
+//add extra params like timestamp
+- (id)addExtraParams:(id)parameters {
+  return parameters;
 }
 
 
