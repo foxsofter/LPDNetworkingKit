@@ -74,6 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)rac_POST:(NSString *)path
                  parameters:(nullable id)parameters
   constructingBodyWithBlock:(void (^)(id<AFMultipartFormData> formData))block {
+  parameters = [self addExtraParams:parameters];
   @weakify(self);
   return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
     @strongify(self);
@@ -128,6 +129,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (RACSignal *)rac_requestPath:(NSString *)path parameters:(nullable id)parameters method:(NSString *)method {
+  parameters = [self addExtraParams:parameters];
   @weakify(self);
   return [RACSignal createSignal:^(id<RACSubscriber> subscriber) {
     @strongify(self);
@@ -237,6 +239,11 @@ NS_ASSUME_NONNULL_BEGIN
 // add extra headers
 - (NSMutableURLRequest *)addExtraHTTPHeader:(NSMutableURLRequest *)request withParameters:(nullable id)parameters {
   return request;
+}
+
+//add extra params like timestamp
+- (id)addExtraParams:(id)parameters {
+  return parameters;
 }
 
 
