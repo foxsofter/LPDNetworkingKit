@@ -90,20 +90,16 @@ NS_ASSUME_NONNULL_BEGIN
       dataTaskWithRequest:self.request
         completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
           @strongify(self);
-          if (error) {
-            [subscriber sendError:[NSError errorWithDomain:error.domain code:error.code userInfo:error.userInfo]];
-          } else {
-            LPDResponseResolveResult *result = [self resolveResponse:(NSHTTPURLResponse *)response endpoint:path responseObject:responseObject];
-            NSObject *responseModel = result.responseModel;
-            NSError *err = result.error;
-            if (err) {
-              [subscriber sendError:err];
-            }
-            if (responseModel) {
-              [subscriber sendNext:RACTuplePack(responseModel, response)];
-            }
-            [subscriber sendCompleted];
+          LPDResponseResolveResult *result = [self resolveResponse:(NSHTTPURLResponse *)response endpoint:path responseObject:responseObject error:error];
+          NSObject *responseModel = result.responseModel;
+          NSError *err = result.error;
+          if (err) {
+            [subscriber sendError:err];
           }
+          if (responseModel) {
+            [subscriber sendNext:RACTuplePack(responseModel, response)];
+          }
+          [subscriber sendCompleted];
         }];
     [task resume];
 
@@ -148,10 +144,7 @@ NS_ASSUME_NONNULL_BEGIN
       dataTaskWithRequest:request
         completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
           @strongify(self);
-          if (error) {
-            [subscriber sendError:[NSError errorWithDomain:error.domain code:error.code userInfo:error.userInfo]];
-          } else {
-            LPDResponseResolveResult *result = [self resolveResponse:(NSHTTPURLResponse *)response endpoint:path responseObject:responseObject];
+            LPDResponseResolveResult *result = [self resolveResponse:(NSHTTPURLResponse *)response endpoint:path responseObject:responseObject error:error];
             NSObject *responseModel = result.responseModel;
             NSError *err = result.error;
             if (err) {
@@ -161,7 +154,6 @@ NS_ASSUME_NONNULL_BEGIN
               [subscriber sendNext:RACTuplePack(responseModel, response)];
             }
             [subscriber sendCompleted];
-          }
         }];
 
     [task resume];
@@ -209,12 +201,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- *  @brief override to handle business error
- *  这里保证了总能返回至少是responseObject, 不处理业务异常;
+ *  @brief override to handle response
+ *
  */
 - (nullable LPDResponseResolveResult *)resolveResponse:(NSHTTPURLResponse *)response
                               endpoint:(NSString *)endpoint
-                        responseObject:(id)responseObject {
+                        responseObject:(id)responseObject
+                                 error:(NSError *)error {
+  if (error) {
+    return [LPDResponseResolveResult resultWithModel:nil error:[NSError errorWithDomain:error.domain code:error.code userInfo:error.userInfo]];
+  }
   id responseModel = responseObject;
   id model = [self modelWithResponseObject:responseObject endpoint:endpoint];
   if (model) {

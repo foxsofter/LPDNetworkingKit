@@ -129,16 +129,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  @brief return synthetical response result
  *
  *  @param response       response
- *  @param endpoint       endpoint
+ *  @param endpoint       endpoint(path)
  *  @param responseObject response object
- *
+ *  @param error network error
  *  @return response model
  */
 
 - (nullable LPDResponseResolveResult *)resolveResponse:(NSHTTPURLResponse *)response
                               endpoint:(NSString *)endpoint
-                        responseObject:(id)responseObject;
-
+                        responseObject:(id)responseObject
+                                 error:(NSError *)error;
 @end
 
 NS_ASSUME_NONNULL_END

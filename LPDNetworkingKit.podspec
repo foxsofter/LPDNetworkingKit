@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LPDNetworkingKit'
-  s.version          = '0.2.7'
+  s.version          = '0.3.0'
   s.summary          = 'A short description of LPDNetworkingKit.'
 
 # This description is used to generate tags and improve search results.
